@@ -1,0 +1,58 @@
+import json
+import re
+import pymysql
+
+conn = pymysql.connect(host='139.155.124.92',
+                       port=3306,
+                       user='test_1', 
+                       password='w6WKNanrcGjPcw22', 
+                       database='test_1', 
+                       charset='utf8')
+cursor = conn.cursor()
+tsql = "insert into movie_info(name, short_desc, score, stars, \
+hot, play_url, img, director, alias, tags, description, play_time) \
+values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+
+f = open('F:\\Newp\\workfile\\tencent_live\\video.json', encoding='utf-8')
+
+res = re.findall(r'\{.*?\}', f.read())
+"""
+temp = json.loads(res[0])
+print(temp)
+cursor.execute(tsql, [temp['name'], temp['short_desc'], temp['score'], \
+                      temp['stars'], temp['hot'], temp['play_url'], \
+                      temp['img'], temp['director'], temp['alias'], \
+                      temp['tags'], temp['description'], temp['play_time']])
+conn.commit()
+temp = json.loads(res[1])
+print(temp)
+cursor.execute(tsql, [temp['name'], temp['short_desc'], temp['score'], \
+                      temp['stars'], temp['hot'], temp['play_url'], \
+                      temp['img'], temp['director'], temp['alias'], \
+                      temp['tags'], temp['description'], temp['play_time']])
+conn.commit()
+
+cursor.close()
+conn.close()
+"""
+for temp in res:
+    json_temp = json.loads(temp)
+    """
+    print(json_temp)
+    i += 1
+    if i>3:
+        break
+    try:
+    """
+    cursor.execute(tsql, [json_temp['name'], json_temp['short_desc'], json_temp['score'], \
+                          json_temp['stars'], json_temp['hot'], json_temp['play_url'], \
+                          json_temp['img'], json_temp['director'], json_temp['alias'], \
+                          json_temp['tags'], json_temp['description'], json_temp['play_time']])
+    conn.commit()
+    #except Exception as e:
+    # 有异常，回滚事务
+    #    conn.rollback()
+        
+cursor.close()
+conn.close()
+#"""    
